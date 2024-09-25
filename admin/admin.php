@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
             $_SESSION['admin_id'] = $admin['admin_id'];
             $_SESSION['admin_username'] = $admin['username'];
             // Redirect to admin.php (which will now show the dashboard)
-            header("Location: admin.php");
+            header("Location: dashboard.php");
             exit();
         } else {
             $error = "Invalid username or password.";

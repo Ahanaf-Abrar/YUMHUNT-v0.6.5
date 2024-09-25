@@ -48,9 +48,10 @@ function addRecipe($pdo, $title, $description, $cookingTime, $image, $instructio
 
 function updateRecipe($pdo, $recipeId, $title, $description, $cookingTime, $image, $instructions, $videoUrl, $nutritionInfo) {
     $uploadDir = '../food_images/';
-    $imageName = $image['name'] ? basename($image['name']) : null;
+    $imageName = null;
     
-    if ($imageName) {
+    if ($image['name']) {
+        $imageName = basename($image['name']);
         $targetFilePath = $uploadDir . $imageName;
         $imageFileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
 
@@ -74,18 +75,26 @@ function updateRecipe($pdo, $recipeId, $title, $description, $cookingTime, $imag
         if ($oldRecipe['image'] && file_exists($uploadDir . $oldRecipe['image'])) {
             unlink($uploadDir . $oldRecipe['image']);
         }
-    } else {
-        // If no new image is uploaded, keep the old image name
-        $oldRecipe = getRecipeById($pdo, $recipeId);
-        $imageName = $oldRecipe['image'];
     }
 
-    $stmt = $pdo->prepare("UPDATE recipe SET title = ?, description = ?, cooking_time = ?, image = ?, instructions = ?, video_url = ?, nutrition_info = ? WHERE recipe_id = ?");
-    return $stmt->execute([$title, $description, $cookingTime, $imageName, $instructions, $videoUrl, json_encode($nutritionInfo), $recipeId]);
+    $stmt = $pdo->prepare("UPDATE recipe SET title = ?, description = ?, cooking_time = ?, instructions = ?, video_url = ?, nutrition_info = ? WHERE recipe_id = ?");
+    $result = $stmt->execute([$title, $description, $cookingTime, $instructions, $videoUrl, json_encode($nutritionInfo), $recipeId]);
+
+    if ($result && $imageName) {
+        $stmt = $pdo->prepare("UPDATE recipe SET image = ? WHERE recipe_id = ?");
+        $result = $stmt->execute([$imageName, $recipeId]);
+    }
+
+    return $result;
 }
 
 function deleteRecipe($pdo, $recipeId) {
     $stmt = $pdo->prepare("DELETE FROM recipe WHERE recipe_id = ?");
+    return $stmt->execute([$recipeId]);
+}
+
+function toggleFeaturedRecipe($pdo, $recipeId) {
+    $stmt = $pdo->prepare("UPDATE recipe SET featured = NOT featured WHERE recipe_id = ?");
     return $stmt->execute([$recipeId]);
 }
 
@@ -111,6 +120,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $success = "Recipe deleted successfully.";
         } else {
             $error = "Failed to delete recipe.";
+        }
+    } elseif (isset($_POST['toggle_featured'])) {
+        $id = $_POST['id'];
+        if (toggleFeaturedRecipe($pdo, $id)) {
+            $success = "Recipe featured status updated successfully.";
+        } else {
+            $error = "Failed to update recipe featured status.";
         }
     }
 }
@@ -168,6 +184,10 @@ $recipes = getAllRecipes($pdo);
                     <form method="post" style="display:inline;">
                         <input type="hidden" name="id" value="<?php echo $recipe['recipe_id']; ?>">
                         <button type="submit" name="delete" onclick="return confirm('Are you sure you want to delete this recipe?');">Delete</button>
+                    </form>
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="<?php echo $recipe['recipe_id']; ?>">
+                        <button type="submit" name="toggle_featured"><?php echo $recipe['featured'] ? 'Unfeature' : 'Feature'; ?></button>
                     </form>
                 </td>
             </tr>

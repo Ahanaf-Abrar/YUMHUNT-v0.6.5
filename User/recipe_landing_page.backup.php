@@ -1,51 +1,42 @@
 <?php
 session_start();
 require_once '../Connection/db_connection.php';
+require_once 'mealplan.php';
+require_once 'shoppingList.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../Credential/login.php");
+    header("Location: all_recipes.php");
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch recipes
-try {
-    $stmt = $pdo->prepare("SELECT * FROM recipe LIMIT 10");
-    $stmt->execute();
-    $recipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Error fetching recipes: " . $e->getMessage());
+// Function to fetch recipes
+function fetchRecipes($pdo) {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM recipe LIMIT 10");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error fetching recipes: " . $e->getMessage());
+    }
 }
 
-// Fetch user's meal plan
-try {
-    $stmt = $pdo->prepare("SELECT mp.meal_plan_id, mp.start_date, mp.end_date, mpr.recipe_id, mpr.date, r.title 
-                           FROM meal_plan mp 
-                           JOIN meal_plan_recipe mpr ON mp.meal_plan_id = mpr.meal_plan_id 
-                           JOIN recipe r ON mpr.recipe_id = r.recipe_id 
-                           WHERE mp.user_id = ? 
-                           ORDER BY mpr.date");
-    $stmt->execute([$user_id]);
-    $meal_plan = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Error fetching meal plan: " . $e->getMessage());
+// Function to fetch favorite recipes
+function fetchFavoriteRecipes($pdo, $user_id) {
+    try {
+        $stmt = $pdo->prepare("SELECT r.* FROM recipe r
+                               JOIN favorite_recipes fr ON r.recipe_id = fr.recipe_id
+                               WHERE fr.user_id = ?");
+        $stmt->execute([$user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Error fetching favorite recipes: " . $e->getMessage());
+    }
 }
 
-// Fetch shopping list
-try {
-    $stmt = $pdo->prepare("SELECT i.name, sl.quantity, sl.unit 
-                           FROM shopping_list sl 
-                           JOIN ingredient i ON sl.ingredient_id = i.ingredient_id
-                           WHERE sl.user_id = ?");
-    $stmt->execute([$user_id]);
-    $shopping_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Error fetching shopping list: " . $e->getMessage());
-}
-
-// Handle adding recipe to meal plan
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_to_meal_plan'])) {
     $recipe_id = $_POST['recipe_id'];
     $date = $_POST['date'];
@@ -81,42 +72,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_to_meal_plan'])) {
         die("Error updating meal plan: " . $e->getMessage());
     }
 }
-?>
 
+// Fetch data
+$recipes = fetchRecipes($pdo);
+$favorite_recipes = fetchFavoriteRecipes($pdo, $user_id);
+$meal_plan = fetchMealPlan($pdo, $user_id);
+$shopping_list = fetchShoppingList($pdo, $user_id);
+
+// HTML content starts here
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Landing Page</title>
+    <title>Meal Planner - YumHunt</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Welcome to YumHunt</h1>
+        <h1>Meal Planner</h1>
         <nav>
             <ul>
-                <li><a href="#recipes">Recipes</a></li>
-                <li><a href="#meal-plan">Meal Plan</a></li>
-                <li><a href="#shopping-list">Shopping List</a></li>
+                <li><a href="all_recipes.php">Home</a></li>
+                <li><a href="recipe_landing_page.php">Meal Planner</a></li>
+                <li><a href="user_dashboard.php">Dashboard</a></li>
+                <li><a href="../Credential/logout.php">Logout</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section id="recipes">
-            <h2>Featured Recipes</h2>
+        <section id="favorite-recipes">
+            <h2>Your Favorite Recipes</h2>
             <div class="recipe-grid">
-                <?php foreach ($recipes as $recipe): ?>
+                <?php
+                $favorite_recipes = fetchFavoriteRecipes($pdo, $user_id);
+                foreach ($favorite_recipes as $recipe):
+                ?>
                     <div class="recipe-card">
-                        <img src="<?php echo htmlspecialchars($recipe['image']); ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>">
+                        <img src="../images/<?php echo htmlspecialchars($recipe['image']); ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>">
                         <h3><?php echo htmlspecialchars($recipe['title']); ?></h3>
                         <p><?php echo htmlspecialchars($recipe['description']); ?></p>
-                        <form action="" method="post">
-                            <input type="hidden" name="recipe_id" value="<?php echo $recipe['recipe_id']; ?>">
-                            <input type="date" name="date" required>
-                            <button type="submit" name="add_to_meal_plan">Add to Meal Plan</button>
-                        </form>
+                        <a href="recipe_details.php?id=<?php echo $recipe['recipe_id']; ?>" class="btn">View Recipe</a>
                     </div>
                 <?php endforeach; ?>
             </div>

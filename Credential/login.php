@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
-            $_SESSION['user_id'] = $user['user_id'];  // Change 'id' to 'user_id'
-            header("Location: ../User/recipe_landing_page.php");
+            $_SESSION['user_id'] = $user['user_id'];
+            header("Location: ../User/all_recipes.php");
             exit();
         } else {
             echo "Invalid email or password.";

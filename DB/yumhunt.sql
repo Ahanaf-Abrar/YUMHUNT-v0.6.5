@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(250) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `signup`
@@ -95,7 +95,8 @@ CREATE TABLE IF NOT EXISTS `recipe` (
   `image` varchar(222) NOT NULL,
   `instructions` text NOT NULL,
   `video_url` varchar(222) NOT NULL,
-  `nutrition_info` json NOT NULL, 
+  `nutrition_info` json NOT NULL,
+  `featured` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`recipe_id`) 
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
@@ -104,42 +105,42 @@ CREATE TABLE IF NOT EXISTS `recipe` (
 -- Dumping data for table `recipe`
 --
 
-INSERT INTO `recipe` (`recipe_id`, `title`, `description`, `cooking_time`, `image`, `instructions`, `video_url`, `nutrition_info`) VALUES
+INSERT INTO `recipe` (`recipe_id`, `title`, `description`, `cooking_time`, `image`, `instructions`, `video_url`, `nutrition_info`, `featured`) VALUES
 (1, 'Spaghetti Carbonara', 'A classic Italian dish with creamy sauce and bacon.', 30, 'spaghetti_carbonara.jpg', 'Boil spaghetti. Cook bacon. Mix in sauce. Serve.', 'https://www.youtube.com/watch?v=1234567890', 
-'{"calories": 600, "macronutrients": {"carbs": {"total": 75, "fiber": 4, "sugar": 3}, "protein": 25, "fat": {"total": 30, "saturated": 12, "unsaturated": 18}}, "micronutrients": {"vitamins": {"A": 5, "C": 2, "D": 0, "E": 3, "K": 10}, "minerals": {"calcium": 15, "iron": 10, "potassium": 6, "sodium": 20}}, "serving_size": "1 plate (350g)", "servings_per_recipe": 4}'),
+'{"calories": 600, "macronutrients": {"carbs": {"total": 75, "fiber": 4, "sugar": 3}, "protein": 25, "fat": {"total": 30, "saturated": 12, "unsaturated": 18}}, "micronutrients": {"vitamins": {"A": 5, "C": 2, "D": 0, "E": 3, "K": 10}, "minerals": {"calcium": 15, "iron": 10, "potassium": 6, "sodium": 20}}, "serving_size": "1 plate (350g)", "servings_per_recipe": 4}', TRUE),
 
 (2, 'Chicken Parmesan', 'A comforting dish with breaded chicken and marinara sauce.', 45, 'chicken_parmesan.jpg', 'Bread chicken. Bake. Serve with sauce.', 'https://www.youtube.com/watch?v=2345678901', 
-'{"calories": 550, "macronutrients": {"carbs": {"total": 40, "fiber": 3, "sugar": 6}, "protein": 45, "fat": {"total": 25, "saturated": 8, "unsaturated": 17}}, "micronutrients": {"vitamins": {"A": 15, "C": 20, "D": 0, "E": 8, "K": 5}, "minerals": {"calcium": 20, "iron": 15, "potassium": 10, "sodium": 25}}, "serving_size": "1 piece (300g)", "servings_per_recipe": 4}'),
+'{"calories": 550, "macronutrients": {"carbs": {"total": 40, "fiber": 3, "sugar": 6}, "protein": 45, "fat": {"total": 25, "saturated": 8, "unsaturated": 17}}, "micronutrients": {"vitamins": {"A": 15, "C": 20, "D": 0, "E": 8, "K": 5}, "minerals": {"calcium": 20, "iron": 15, "potassium": 10, "sodium": 25}}, "serving_size": "1 piece (300g)", "servings_per_recipe": 4}', TRUE),
 
 (3, 'Beef Tacos', 'A quick and easy taco recipe with seasoned beef and soft tortillas.', 20, 'beef_tacos.jpg', 'Cook beef. Warm tortillas. Serve with toppings.', 'https://www.youtube.com/watch?v=3456789012', 
-'{"calories": 450, "macronutrients": {"carbs": {"total": 35, "fiber": 3, "sugar": 2}, "protein": 28, "fat": {"total": 22, "saturated": 9, "unsaturated": 13}}, "micronutrients": {"vitamins": {"A": 10, "C": 8, "D": 0, "E": 5, "K": 15}, "minerals": {"calcium": 10, "iron": 15, "potassium": 8, "sodium": 18}}, "serving_size": "2 tacos (250g)", "servings_per_recipe": 4}'),
+'{"calories": 450, "macronutrients": {"carbs": {"total": 35, "fiber": 3, "sugar": 2}, "protein": 28, "fat": {"total": 22, "saturated": 9, "unsaturated": 13}}, "micronutrients": {"vitamins": {"A": 10, "C": 8, "D": 0, "E": 5, "K": 15}, "minerals": {"calcium": 10, "iron": 15, "potassium": 8, "sodium": 18}}, "serving_size": "2 tacos (250g)", "servings_per_recipe": 4}', FALSE),
 
 (4, 'Vegetable Stir-Fry', 'A healthy and colorful stir-fry with a variety of vegetables.', 15, 'vegetable_stir_fry.jpg', 'Stir-fry vegetables. Serve with sauce.', 'https://www.youtube.com/watch?v=4567890123', 
-'{"calories": 250, "macronutrients": {"carbs": {"total": 30, "fiber": 8, "sugar": 10}, "protein": 10, "fat": {"total": 12, "saturated": 2, "unsaturated": 10}}, "micronutrients": {"vitamins": {"A": 80, "C": 100, "D": 0, "E": 15, "K": 70}, "minerals": {"calcium": 8, "iron": 15, "potassium": 20, "sodium": 10}}, "serving_size": "1 cup (200g)", "servings_per_recipe": 4}'),
+'{"calories": 250, "macronutrients": {"carbs": {"total": 30, "fiber": 8, "sugar": 10}, "protein": 10, "fat": {"total": 12, "saturated": 2, "unsaturated": 10}}, "micronutrients": {"vitamins": {"A": 80, "C": 100, "D": 0, "E": 15, "K": 70}, "minerals": {"calcium": 8, "iron": 15, "potassium": 20, "sodium": 10}}, "serving_size": "1 cup (200g)", "servings_per_recipe": 4}', FALSE),
 
 (5, 'Grilled Salmon with Lemon-Dill Sauce', 'A light and refreshing dish with grilled salmon and a lemon-dill sauce.', 25, 'grilled_salmon.jpg', 'Grill salmon. Mix sauce. Serve.', 'https://www.youtube.com/watch?v=5678901234', 
-'{"calories": 400, "macronutrients": {"carbs": {"total": 5, "fiber": 1, "sugar": 2}, "protein": 40, "fat": {"total": 25, "saturated": 5, "unsaturated": 20}}, "micronutrients": {"vitamins": {"A": 5, "C": 15, "D": 100, "E": 10, "K": 5}, "minerals": {"calcium": 5, "iron": 8, "potassium": 15, "sodium": 12}}, "serving_size": "1 fillet (180g)", "servings_per_recipe": 4}'),
+'{"calories": 400, "macronutrients": {"carbs": {"total": 5, "fiber": 1, "sugar": 2}, "protein": 40, "fat": {"total": 25, "saturated": 5, "unsaturated": 20}}, "micronutrients": {"vitamins": {"A": 5, "C": 15, "D": 100, "E": 10, "K": 5}, "minerals": {"calcium": 5, "iron": 8, "potassium": 15, "sodium": 12}}, "serving_size": "1 fillet (180g)", "servings_per_recipe": 4}', TRUE),
 
 (6, 'Mushroom Risotto', 'A creamy Italian rice dish with savory mushrooms.', 40, 'mushroom_risotto.jpg', 'Sauté mushrooms. Cook rice slowly with broth. Stir until creamy.', 'https://www.youtube.com/watch?v=6789012345', 
-'{"calories": 450, "macronutrients": {"carbs": {"total": 65, "fiber": 3, "sugar": 2}, "protein": 10, "fat": {"total": 18, "saturated": 7, "unsaturated": 11}}, "micronutrients": {"vitamins": {"A": 5, "C": 2, "D": 0, "E": 2, "K": 8}, "minerals": {"calcium": 5, "iron": 10, "potassium": 5, "sodium": 15}}, "serving_size": "1 cup (250g)", "servings_per_recipe": 4}'),
+'{"calories": 450, "macronutrients": {"carbs": {"total": 65, "fiber": 3, "sugar": 2}, "protein": 10, "fat": {"total": 18, "saturated": 7, "unsaturated": 11}}, "micronutrients": {"vitamins": {"A": 5, "C": 2, "D": 0, "E": 2, "K": 8}, "minerals": {"calcium": 5, "iron": 10, "potassium": 5, "sodium": 15}}, "serving_size": "1 cup (250g)", "servings_per_recipe": 4}', FALSE),
 
 (7, 'Quinoa Salad with Roasted Vegetables', 'A nutritious and colorful salad with protein-rich quinoa and roasted veggies.', 35, 'quinoa_salad.jpg', 'Cook quinoa. Roast vegetables. Mix and serve with dressing.', 'https://www.youtube.com/watch?v=7890123456', 
-'{"calories": 350, "macronutrients": {"carbs": {"total": 45, "fiber": 7, "sugar": 5}, "protein": 12, "fat": {"total": 18, "saturated": 2, "unsaturated": 16}}, "micronutrients": {"vitamins": {"A": 50, "C": 60, "D": 0, "E": 20, "K": 80}, "minerals": {"calcium": 8, "iron": 20, "potassium": 15, "sodium": 5}}, "serving_size": "1 bowl (300g)", "servings_per_recipe": 4}'),
+'{"calories": 350, "macronutrients": {"carbs": {"total": 45, "fiber": 7, "sugar": 5}, "protein": 12, "fat": {"total": 18, "saturated": 2, "unsaturated": 16}}, "micronutrients": {"vitamins": {"A": 50, "C": 60, "D": 0, "E": 20, "K": 80}, "minerals": {"calcium": 8, "iron": 20, "potassium": 15, "sodium": 5}}, "serving_size": "1 bowl (300g)", "servings_per_recipe": 4}', TRUE),
 
 (8, 'Beef and Broccoli Stir-Fry', 'A quick and flavorful Asian-inspired dish with tender beef and crisp broccoli.', 25, 'beef_broccoli.jpg', 'Slice beef. Stir-fry with broccoli. Add sauce and serve over rice.', 'https://www.youtube.com/watch?v=8901234567', 
-'{"calories": 400, "macronutrients": {"carbs": {"total": 30, "fiber": 4, "sugar": 6}, "protein": 35, "fat": {"total": 20, "saturated": 6, "unsaturated": 14}}, "micronutrients": {"vitamins": {"A": 40, "C": 120, "D": 0, "E": 10, "K": 100}, "minerals": {"calcium": 10, "iron": 25, "potassium": 20, "sodium": 15}}, "serving_size": "1 plate (350g)", "servings_per_recipe": 4}'),
+'{"calories": 400, "macronutrients": {"carbs": {"total": 30, "fiber": 4, "sugar": 6}, "protein": 35, "fat": {"total": 20, "saturated": 6, "unsaturated": 14}}, "micronutrients": {"vitamins": {"A": 40, "C": 120, "D": 0, "E": 10, "K": 100}, "minerals": {"calcium": 10, "iron": 25, "potassium": 20, "sodium": 15}}, "serving_size": "1 plate (350g)", "servings_per_recipe": 4}', FALSE),
 
 (9, 'Lemon Garlic Roasted Chicken', 'A classic roasted chicken infused with zesty lemon and aromatic garlic.', 75, 'lemon_chicken.jpg', 'Season chicken. Stuff with lemon and garlic. Roast until golden.', 'https://www.youtube.com/watch?v=9012345678', 
-'{"calories": 300, "macronutrients": {"carbs": {"total": 5, "fiber": 1, "sugar": 2}, "protein": 40, "fat": {"total": 15, "saturated": 4, "unsaturated": 11}}, "micronutrients": {"vitamins": {"A": 6, "C": 10, "D": 0, "E": 2, "K": 5}, "minerals": {"calcium": 2, "iron": 10, "potassium": 12, "sodium": 8}}, "serving_size": "1 chicken breast (180g)", "servings_per_recipe": 4}'),
+'{"calories": 300, "macronutrients": {"carbs": {"total": 5, "fiber": 1, "sugar": 2}, "protein": 40, "fat": {"total": 15, "saturated": 4, "unsaturated": 11}}, "micronutrients": {"vitamins": {"A": 6, "C": 10, "D": 0, "E": 2, "K": 5}, "minerals": {"calcium": 2, "iron": 10, "potassium": 12, "sodium": 8}}, "serving_size": "1 chicken breast (180g)", "servings_per_recipe": 4}', TRUE),
 
 (10, 'Vegetarian Chili', 'A hearty and spicy chili packed with beans and vegetables.', 50, 'vegetarian_chili.jpg', 'Sauté vegetables. Add beans and tomatoes. Simmer with spices.', 'https://www.youtube.com/watch?v=0123456789', 
-'{"calories": 280, "macronutrients": {"carbs": {"total": 45, "fiber": 12, "sugar": 8}, "protein": 15, "fat": {"total": 8, "saturated": 1, "unsaturated": 7}}, "micronutrients": {"vitamins": {"A": 30, "C": 40, "D": 0, "E": 10, "K": 20}, "minerals": {"calcium": 15, "iron": 25, "potassium": 20, "sodium": 10}}, "serving_size": "1 bowl (300g)", "servings_per_recipe": 6}'),
+'{"calories": 280, "macronutrients": {"carbs": {"total": 45, "fiber": 12, "sugar": 8}, "protein": 15, "fat": {"total": 8, "saturated": 1, "unsaturated": 7}}, "micronutrients": {"vitamins": {"A": 30, "C": 40, "D": 0, "E": 10, "K": 20}, "minerals": {"calcium": 15, "iron": 25, "potassium": 20, "sodium": 10}}, "serving_size": "1 bowl (300g)", "servings_per_recipe": 6}', FALSE),
 
 (11, 'Shrimp Pad Thai', 'A popular Thai noodle dish with succulent shrimp and a tangy sauce.', 30, 'shrimp_pad_thai.jpg', 'Cook noodles. Stir-fry shrimp and vegetables. Toss with sauce and noodles.', 'https://www.youtube.com/watch?v=1234509876', 
-'{"calories": 420, "macronutrients": {"carbs": {"total": 55, "fiber": 3, "sugar": 10}, "protein": 25, "fat": {"total": 16, "saturated": 3, "unsaturated": 13}}, "micronutrients": {"vitamins": {"A": 15, "C": 20, "D": 0, "E": 8, "K": 30}, "minerals": {"calcium": 10, "iron": 15, "potassium": 8, "sodium": 25}}, "serving_size": "1 plate (350g)", "servings_per_recipe": 4}'),
+'{"calories": 420, "macronutrients": {"carbs": {"total": 55, "fiber": 3, "sugar": 10}, "protein": 25, "fat": {"total": 16, "saturated": 3, "unsaturated": 13}}, "micronutrients": {"vitamins": {"A": 15, "C": 20, "D": 0, "E": 8, "K": 30}, "minerals": {"calcium": 10, "iron": 15, "potassium": 8, "sodium": 25}}, "serving_size": "1 plate (350g)", "servings_per_recipe": 4}', TRUE),
 
 (12, 'Spinach and Feta Stuffed Chicken Breast', 'Juicy chicken breast filled with a creamy spinach and feta mixture.', 40, 'stuffed_chicken.jpg', 'Butterfly chicken breasts. Stuff with spinach and feta. Bake until cooked through.', 'https://www.youtube.com/watch?v=2345610987', 
-'{"calories": 350, "macronutrients": {"carbs": {"total": 5, "fiber": 2, "sugar": 1}, "protein": 45, "fat": {"total": 18, "saturated": 6, "unsaturated": 12}}, "micronutrients": {"vitamins": {"A": 70, "C": 15, "D": 0, "E": 10, "K": 120}, "minerals": {"calcium": 15, "iron": 20, "potassium": 10, "sodium": 18}}, "serving_size": "1 stuffed breast (200g)", "servings_per_recipe": 4}');
+'{"calories": 350, "macronutrients": {"carbs": {"total": 5, "fiber": 2, "sugar": 1}, "protein": 45, "fat": {"total": 18, "saturated": 6, "unsaturated": 12}}, "micronutrients": {"vitamins": {"A": 70, "C": 15, "D": 0, "E": 10, "K": 120}, "minerals": {"calcium": 15, "iron": 20, "potassium": 10, "sodium": 18}}, "serving_size": "1 stuffed breast (200g)", "servings_per_recipe": 4}', TRUE);
 
 
 -- --------------------------------------------------------
@@ -364,6 +365,21 @@ CREATE TABLE IF NOT EXISTS `meal_plan_recipe` (
   `date` date NOT NULL,
   PRIMARY KEY (`meal_plan_id`,`recipe_id`),
   FOREIGN KEY (`meal_plan_id`) REFERENCES `meal_plan`(`meal_plan_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`recipe_id`) REFERENCES `recipe`(`recipe_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `favorite_recipes`
+--
+
+-- DROP TABLE IF EXISTS `favorite_recipes`;
+CREATE TABLE IF NOT EXISTS `favorite_recipes` (
+  `user_id` int(11) NOT NULL,
+  `recipe_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`, `recipe_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
   FOREIGN KEY (`recipe_id`) REFERENCES `recipe`(`recipe_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
