@@ -23,7 +23,8 @@ function fetchUserInfo($pdo, $user_id) {
 function fetchUserPreferences($pdo, $user_id) {
     $stmt = $pdo->prepare("SELECT cuisine_preference, dietary_preference FROM user_preferences WHERE user_id = ?");
     $stmt->execute([$user_id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result : ['cuisine_preference' => '', 'dietary_preference' => ''];
 }
 
 // Fetch data
@@ -73,12 +74,20 @@ $shopping_list = fetchShoppingList($pdo, $user_id);
                                 <tr>
                                     <td><?php echo htmlspecialchars($meal['date']); ?></td>
                                     <td><?php echo htmlspecialchars($meal['title']); ?></td>
+                                    <td>
+                                        <form action="delete_mealPlan_recipe.php" method="post" onsubmit="return confirm('Are you sure you want to remove this recipe from your meal plan?');">
+                                            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                            <input type="hidden" name="recipe_id" value="<?php echo $meal['recipe_id']; ?>">
+                                            <input type="hidden" name="date" value="<?php echo $meal['date']; ?>">
+                                            <button type="submit" class="btn btn-delete">Delete</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 <?php endif; ?>
-                <a href="recipe_landing_page.php" class="btn">Add to Meal Plan</a>
+                <a href="mealPlanner.php" class="btn">Add to Meal Plan</a>
             </section>
 
             <section id="shopping-list" class="dashboard-section">
@@ -102,7 +111,23 @@ $shopping_list = fetchShoppingList($pdo, $user_id);
                 <?php else: ?>
                     <p>You haven't set any preferences yet.</p>
                 <?php endif; ?>
-                <a href="edit_preferences.php" class="btn">Edit Preferences</a>
+                <form action="update_preferences.php" method="post">
+                    <label for="cuisine_preference">Cuisine Preference:</label>
+                    <select name="cuisine_preference" id="cuisine_preference">
+                        <option value="Italian" <?php echo ($user_preferences['cuisine_preference'] == 'Italian') ? 'selected' : ''; ?>>Italian</option>
+                        <option value="Mexican" <?php echo ($user_preferences['cuisine_preference'] == 'Mexican') ? 'selected' : ''; ?>>Mexican</option>
+                        <option value="Chinese" <?php echo ($user_preferences['cuisine_preference'] == 'Chinese') ? 'selected' : ''; ?>>Chinese</option>
+                        <option value="Indian" <?php echo ($user_preferences['cuisine_preference'] == 'Indian') ? 'selected' : ''; ?>>Indian</option>
+                    </select>
+                    <label for="dietary_preference">Dietary Preference:</label>
+                    <select name="dietary_preference" id="dietary_preference">
+                        <option value="None" <?php echo ($user_preferences['dietary_preference'] == 'None') ? 'selected' : ''; ?>>None</option>
+                        <option value="Vegetarian" <?php echo ($user_preferences['dietary_preference'] == 'Vegetarian') ? 'selected' : ''; ?>>Vegetarian</option>
+                        <option value="Vegan" <?php echo ($user_preferences['dietary_preference'] == 'Vegan') ? 'selected' : ''; ?>>Vegan</option>
+                        <option value="Gluten-Free" <?php echo ($user_preferences['dietary_preference'] == 'Gluten-Free') ? 'selected' : ''; ?>>Gluten-Free</option>
+                    </select>
+                    <button type="submit" class="btn">Update Preferences</button>
+                </form>
             </section>
         </div>
     </main>

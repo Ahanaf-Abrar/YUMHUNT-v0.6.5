@@ -120,7 +120,7 @@ $shopping_list = fetchShoppingList($pdo, $user_id); -->
         <nav>
             <ul>
                 <li><a href="all_recipes.php">Home</a></li>
-                <li><a href="recipe_landing_page.php">Meal Planner</a></li>
+                <li><a href="mealPlanner.php">Meal Planner</a></li>
                 <li><a href="user_dashboard.php">Dashboard</a></li>
                 <li><a href="../Credential/logout.php">Logout</a></li>
             </ul>

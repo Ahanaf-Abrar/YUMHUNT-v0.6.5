@@ -36,3 +36,49 @@ function addRecipeToMealPlan($pdo, $user_id, $recipe_id, $date) {
         die("Error updating meal plan: " . $e->getMessage());
     }
 }
+
+function deleteRecipeFromMealPlan($pdo, $user_id, $recipe_id, $date) {
+    try {
+        $pdo->beginTransaction();
+
+        // Delete the recipe from the meal plan
+        $stmt = $pdo->prepare("DELETE mpr FROM meal_plan_recipe mpr
+                               JOIN meal_plan mp ON mpr.meal_plan_id = mp.meal_plan_id
+                               WHERE mp.user_id = ? AND mpr.recipe_id = ? AND mpr.date = ?");
+        $stmt->execute([$user_id, $recipe_id, $date]);
+
+        // Remove ingredients from the shopping list
+        $stmt = $pdo->prepare("UPDATE shopping_list sl
+                               JOIN recipe_ingredient ri ON sl.ingredient_id = ri.ingredient_id
+                               SET sl.quantity = GREATEST(0, sl.quantity - ri.quantity)
+                               WHERE sl.user_id = ? AND ri.recipe_id = ?");
+        $stmt->execute([$user_id, $recipe_id]);
+
+        // Remove ingredients with quantity 0
+        $stmt = $pdo->prepare("DELETE FROM shopping_list WHERE user_id = ? AND quantity = 0");
+        $stmt->execute([$user_id]);
+
+        $pdo->commit();
+        return true;
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        die("Error deleting recipe from meal plan: " . $e->getMessage());
+    }
+}
+
+// Check if the necessary parameters are set in the POST request
+if (isset($_POST['user_id'], $_POST['recipe_id'], $_POST['date'])) {
+    $user_id = $_POST['user_id'];
+    $recipe_id = $_POST['recipe_id'];
+    $date = $_POST['date'];
+
+    $success = deleteRecipeFromMealPlan($pdo, $user_id, $recipe_id, $date);
+    if ($success) {
+        echo "Recipe successfully removed from meal plan and shopping list updated.";
+    } else {
+        echo "There was an error removing the recipe from the meal plan.";
+    }
+} else {
+    echo "Missing required parameters. Please provide user_id, recipe_id, and date.";
+}
+?>
