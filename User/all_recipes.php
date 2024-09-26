@@ -49,7 +49,7 @@ $recipes = fetchAllRecipes($pdo);
             <div class="recipe-grid">
                 <?php foreach ($recipes as $recipe): ?>
                     <div class="recipe-card">
-                        <img src="../images/<?php echo htmlspecialchars($recipe['image']); ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>">
+                        <img src="../food_images/<?php echo htmlspecialchars($recipe['image']); ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>">
                         <h3><?php echo htmlspecialchars($recipe['title']); ?></h3>
                         <p><?php echo htmlspecialchars($recipe['description']); ?></p>
                         <a href="recipe_details.php?id=<?php echo $recipe['recipe_id']; ?>" class="btn">View Recipe</a>

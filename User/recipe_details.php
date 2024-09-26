@@ -98,7 +98,7 @@ if (isset($_SESSION['message'])) {
 
     <main class="container">
         <section id="recipe-details">
-            <img src="../images/<?php echo htmlspecialchars($recipe['image']); ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>">
+            <img src="../food_images/<?php echo htmlspecialchars($recipe['image']); ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>">
             <p class="description"><?php echo htmlspecialchars($recipe['description']); ?></p>
             
             <h2>Ingredients</h2>

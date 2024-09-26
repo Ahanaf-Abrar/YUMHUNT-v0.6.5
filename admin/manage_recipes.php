@@ -178,7 +178,7 @@ $recipes = getAllRecipes($pdo);
                 <td><?php echo $recipe['recipe_id']; ?></td>
                 <td><?php echo htmlspecialchars($recipe['title']); ?></td>
                 <td><?php echo $recipe['cooking_time']; ?> minutes</td>
-                <td><img src="../uploads/recipes/<?php echo $recipe['image']; ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>" width="100"></td>
+                <td><img src="../food_images/<?php echo $recipe['image']; ?>" alt="<?php echo htmlspecialchars($recipe['title']); ?>" width="100"></td>
                 <td>
                     <a href="edit_recipe.php?id=<?php echo $recipe['recipe_id']; ?>">Edit</a>
                     <form method="post" style="display:inline;">
