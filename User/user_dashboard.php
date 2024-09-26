@@ -47,9 +47,9 @@ $shopping_list = fetchShoppingList($pdo, $user_id);
         <h1>Welcome, <?php echo htmlspecialchars($user_info['firstname'] . ' ' . $user_info['lastname']); ?>!</h1>
         <nav>
             <ul>
-                <li><a href="mealPlanner.php">Recipes</a></li>
-                <li><a href="#meal-plan">Meal Plan</a></li>
-                <li><a href="#shopping-list">Shopping List</a></li>
+                <li><a href="all_recipes.php">Home</a></li>
+                <!-- <li><a href="#meal-plan">Meal Plan</a></li>
+                <li><a href="#shopping-list">Shopping List</a></li> -->
                 <li><a href="../Credential/logout.php">Logout</a></li>
             </ul>
         </nav>
@@ -117,7 +117,7 @@ $shopping_list = fetchShoppingList($pdo, $user_id);
                         <option value="Italian" <?php echo ($user_preferences['cuisine_preference'] == 'Italian') ? 'selected' : ''; ?>>Italian</option>
                         <option value="Mexican" <?php echo ($user_preferences['cuisine_preference'] == 'Mexican') ? 'selected' : ''; ?>>Mexican</option>
                         <option value="Chinese" <?php echo ($user_preferences['cuisine_preference'] == 'Chinese') ? 'selected' : ''; ?>>Chinese</option>
-                        <option value="Indian" <?php echo ($user_preferences['cuisine_preference'] == 'Indian') ? 'selected' : ''; ?>>Indian</option>
+                        <option value="Bangali" <?php echo ($user_preferences['cuisine_preference'] == 'Bangali') ? 'selected' : ''; ?>>Bangali</option>
                     </select>
                     <label for="dietary_preference">Dietary Preference:</label>
                     <select name="dietary_preference" id="dietary_preference">
